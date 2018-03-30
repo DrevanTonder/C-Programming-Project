@@ -11,6 +11,6 @@ namespace BL
         public bool OnOrder { get; set; }
         public string Description { get; set; }
         public int CurrentCount { get; set; }
-        public string ItemCode { get; set; }
+        public string Code { get; set; }
     }
 }
