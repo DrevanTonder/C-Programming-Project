@@ -14,6 +14,7 @@ namespace BL
 
         private ItemRepository() { }
 
+
         public static ItemRepository Instance
         {
             get
@@ -26,14 +27,13 @@ namespace BL
             }
         }
 
-        public IList<Item> All()
+        public List<Item> Retrieve()
         {
             var csv = new CsvHelper.CsvReader(new StreamReader(File.OpenRead("c:/Stockfile/file.csv")));
             csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
             csv.Configuration.PrepareHeaderForMatch = header => { return header.Replace(" ", string.Empty).Replace("Item", string.Empty); };
-            var items = csv.GetRecords<Item>();
 
-            return new List<Item>(items);
+            return new List<Item>(csv.GetRecords<Item>());
         }
 
         public class MyBooleanConverter : CsvHelper.TypeConversion.DefaultTypeConverter

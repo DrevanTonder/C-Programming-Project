@@ -13,7 +13,7 @@ namespace WF
 {
     public partial class ItemView : Form
     {
-        private IList<Item> items;
+        private Dictionary<string,Item> itemDictionary;
 
         public ItemView()
         {
@@ -22,13 +22,63 @@ namespace WF
 
         private void ItemView_Load(object sender, EventArgs e)
         {
-            items = ItemRepository.Instance.All();
-            ItemDataGridView.DataSource = items;
+            itemDictionary = new Dictionary<string, Item>();
+
+            CreateColumns();
+            PopulateRows(ItemRepository.Instance.Retrieve());
         }
 
-        private void ItemDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void PopulateRows(IEnumerable<Item> items)
+        {
+            foreach (var item in items)
+            {
+                PopulateRow(item);
+            }
+        }
+
+        private void PopulateRow(Item item)
+        {
+            var row = new object[4] { item.Code, item.Description, item.CurrentCount, item.OnOrder };
+            ItemDataGridView.Rows.Add(row);
+
+            itemDictionary[item.Code] = item;
+        }
+
+        private void CreateColumns()
+        {
+            ItemDataGridView.ColumnCount = 4;
+
+            CreateColumn("Item Code",0);
+            CreateColumn("Description", 1);
+            CreateColumn("Current Count", 2, readOnly:false);
+            CreateColumn("On Order", 3);
+        }
+
+        private void CreateColumn(string name,int index, bool readOnly = true)
+        {
+            DataGridViewColumn column = ItemDataGridView.Columns[index];
+            column.Name = name;
+            column.ReadOnly = readOnly;
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ItemDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            var itemCode = (string)ItemDataGridView.Rows[e.RowIndex].Cells[0].Value;
+            var itemCurrentCount = (int)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+            UpdateCurrentCount(itemCode,itemCurrentCount);
+        }
+
+        private void UpdateCurrentCount(string itemCode,int itemCurrentCount)
+        {           
+            var item = itemDictionary[itemCode];
+            
+            item.CurrentCount = itemCurrentCount;
         }
     }
 }
