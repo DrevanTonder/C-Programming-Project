@@ -37,6 +37,7 @@
             this.ItemDataGridView.AllowUserToAddRows = false;
             this.ItemDataGridView.AllowUserToDeleteRows = false;
             this.ItemDataGridView.AllowUserToOrderColumns = true;
+            this.ItemDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ItemDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ItemDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ItemDataGridView.Location = new System.Drawing.Point(0, 0);
