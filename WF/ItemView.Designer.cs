@@ -31,8 +31,8 @@
             this.ItemDataGridView = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ItemDataGridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -44,6 +44,7 @@
             this.ItemDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ItemDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.ItemDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ItemDataGridView.GridColor = System.Drawing.SystemColors.ControlLight;
             this.ItemDataGridView.Location = new System.Drawing.Point(0, 24);
             this.ItemDataGridView.Name = "ItemDataGridView";
             this.ItemDataGridView.Size = new System.Drawing.Size(628, 452);
@@ -69,18 +70,18 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exportToolStripMenuItem.Text = "Export";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
-            // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.importToolStripMenuItem.Text = "Import";
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // ItemView
             // 
