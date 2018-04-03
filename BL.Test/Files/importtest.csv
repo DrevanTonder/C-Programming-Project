@@ -1,0 +1,18 @@
+Item Code,Item Description,Current Count,On Order
+A0001,Horse on Wheels,5,No
+A0002,Elephant on Wheels,2,No
+A0003,Dog on Wheels,0,Yes
+A0004,Seal on Wheels,3,No
+A0005,Bear on Wheels,7,No
+A0006,Teddy Bear,2,Yes
+A0007,Clown,5,No
+A0008,Puppy(crouch),3,No
+A0009,Puppy(stand),2,No
+A0010,Puppy(jump),2,Yes
+A0011,Pupp(lying),1,Yes
+A0012,Cart with Blocks (50),0,Yes
+A0013,Cart with Blocks (100),5,No
+A0014,Cart with Blocks (200),4,No
+A0015,Train with 0 Carriage,12,No
+A0016,Train with 1 Carriage,10,No
+A0017,Train with 2 Carriage,5,Yes

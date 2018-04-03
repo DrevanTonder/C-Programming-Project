@@ -17,7 +17,7 @@ namespace BL.Tests
         public void RetrieveTest()
         {
             //Assign
-            FileStream stream = File.OpenRead("c:/stockfile/importtest.csv");
+            FileStream stream = File.OpenRead(@"Files/importtest.csv");
             var expected = new Item()
             {
                 Code = "A0001",
@@ -40,8 +40,8 @@ namespace BL.Tests
         public void SaveTest()
         {
             //Assign
-            var read = "c:/stockfile/importtest.csv";
-            var write = "c:/stockfile/exporttest.csv";
+            var read = @"Files/importtest.csv";
+            var write = @"Files/exporttest.csv";
             
             var expected = new Item()
             {
@@ -79,8 +79,8 @@ namespace BL.Tests
         public void UpdateTest()
         {
             //Assign
-            var read = "c:/stockfile/importtest.csv";
-            var write = "c:/stockfile/exporttest.csv";
+            var read = @"Files/importtest.csv";
+            var write = @"Files/importtest.csv";
 
             var expected = new Item()
             {
