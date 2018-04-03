@@ -61,15 +61,10 @@ namespace WF
             column.ReadOnly = readOnly;
         }
 
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ItemDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var itemCode = (string)ItemDataGridView.Rows[e.RowIndex].Cells[0].Value;
-            var itemCurrentCount = (int)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            var itemCurrentCount = int.Parse((string)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
 
             UpdateCurrentCount(itemCode,itemCurrentCount);
         }
@@ -79,6 +74,11 @@ namespace WF
             var item = itemDictionary[itemCode];
             
             item.CurrentCount = itemCurrentCount;
+        }
+
+        private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ItemRepository.Instance.Save(itemDictionary.Values);
         }
     }
 }
