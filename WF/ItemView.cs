@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,6 @@ namespace WF
         private void ItemView_Load(object sender, EventArgs e)
         {
             itemDictionary = new Dictionary<string, Item>();
-
-            CreateColumns();
-            PopulateRows(ItemRepository.Instance.Retrieve());
         }
 
         private void PopulateRows(IEnumerable<Item> items)
@@ -40,8 +38,6 @@ namespace WF
         {
             var row = new object[4] { item.Code, item.Description, item.CurrentCount, item.OnOrder };
             ItemDataGridView.Rows.Add(row);
-
-            itemDictionary[item.Code] = item;
         }
 
         private void CreateColumns()
@@ -66,19 +62,60 @@ namespace WF
             var itemCode = (string)ItemDataGridView.Rows[e.RowIndex].Cells[0].Value;
             var itemCurrentCount = int.Parse((string)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
 
-            UpdateCurrentCount(itemCode,itemCurrentCount);
-        }
-
-        private void UpdateCurrentCount(string itemCode,int itemCurrentCount)
-        {           
-            var item = itemDictionary[itemCode];
-            
-            item.CurrentCount = itemCurrentCount;
+            ItemRepository.Instance.Update(itemCode,itemCurrentCount);
         }
 
         private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ItemRepository.Instance.Save(itemDictionary.Values);
+            
+            Stream stream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((stream = saveFileDialog1.OpenFile()) != null)
+                {
+                    ItemRepository.Instance.Save(stream);
+                    
+                    stream.Close();
+                }
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream stream = null;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = "c:\\",
+                Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((stream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (stream)
+                        {
+                            CreateColumns();
+                            PopulateRows(ItemRepository.Instance.Retrieve(stream));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
         }
     }
 }

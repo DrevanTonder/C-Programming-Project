@@ -10,10 +10,13 @@ namespace BL
 {
     public class ItemRepository
     {
+        private Dictionary<string, Item> items;
+
         private static ItemRepository instance;
 
-        private ItemRepository() { }
-
+        private ItemRepository() {
+            items = new Dictionary<string, Item>();
+        }
 
         public static ItemRepository Instance
         {
@@ -27,29 +30,40 @@ namespace BL
             }
         }
 
-        public IEnumerable<Item> Retrieve()
+        public IEnumerable<Item> Retrieve(Stream stream)
         {
-            using (FileStream fileStream = File.OpenRead("c:/Stockfile/file.csv"))
-            using (var reader = new StreamReader(fileStream))
+            List<Item> itemList;
+
+            using (var reader = new StreamReader(stream))
             using (var csv = new CsvHelper.CsvReader(reader))
             {
                 csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
                 csv.Configuration.RegisterClassMap<ItemMap>();
-                return new List<Item>(csv.GetRecords<Item>());
+                itemList = new List<Item>(csv.GetRecords<Item>());
             }
+            
+            foreach(var item in itemList)
+            {
+                items[item.Code] = item;
+            }
+
+            return itemList;
         }
 
-        public void Save(IEnumerable<Item> items)
+        public void Save(Stream stream)
         {
-            using (FileStream fileStream = File.OpenWrite("c:/Stockfile/export.csv"))
-            using (var writer = new StreamWriter(fileStream))
+            using (var writer = new StreamWriter(stream))
             using (var csv = new CsvHelper.CsvWriter(writer))
             {
                 csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
                 csv.Configuration.RegisterClassMap<ItemMap>();
-                csv.WriteRecords(items);
+                csv.WriteRecords(items.Values);
             }
-            
+        }
+
+        public void Update(string itemCode, int CurrentCount)
+        {
+            items[itemCode].CurrentCount = CurrentCount;
         }
 
         public class MyBooleanConverter : CsvHelper.TypeConversion.DefaultTypeConverter
