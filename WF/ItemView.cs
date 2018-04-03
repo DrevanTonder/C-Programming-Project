@@ -87,7 +87,7 @@ namespace WF
             }
         }
 
-        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Stream stream = null;
             OpenFileDialog openFileDialog1 = new OpenFileDialog
