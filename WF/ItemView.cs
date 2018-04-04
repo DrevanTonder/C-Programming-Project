@@ -24,6 +24,8 @@ namespace WF
         private void ItemView_Load(object sender, EventArgs e)
         {
             itemDictionary = new Dictionary<string, Item>();
+
+            ItemDataGridView.DataError += ItemDataGridView_DataError;
         }
 
         private void PopulateRows(IEnumerable<Item> items)
@@ -44,23 +46,24 @@ namespace WF
         {
             ItemDataGridView.ColumnCount = 4;
 
-            CreateColumn("Item Code",0);
-            CreateColumn("Description", 1);
-            CreateColumn("Current Count", 2, readOnly:false);
-            CreateColumn("On Order", 3);
+            CreateColumn("Item Code",ColumnType.Code, typeof(string));
+            CreateColumn("Description", ColumnType.Description, typeof(string));
+            CreateColumn("Current Count", ColumnType.CurrentCount, typeof(int), readOnly:false);
+            CreateColumn("On Order", ColumnType.OnOrder, typeof(bool));
         }
 
-        private void CreateColumn(string name,int index, bool readOnly = true)
+        private void CreateColumn(string name,ColumnType columnType,Type type, bool readOnly = true)
         {
-            DataGridViewColumn column = ItemDataGridView.Columns[index];
+            DataGridViewColumn column = ItemDataGridView.Columns[(int)columnType];
             column.Name = name;
+            column.ValueType = type;
             column.ReadOnly = readOnly;
         }
 
         private void ItemDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var itemCode = (string)ItemDataGridView.Rows[e.RowIndex].Cells[0].Value;
-            var itemCurrentCount = int.Parse((string)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+            var itemCurrentCount = (int)ItemDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
 
             ItemRepository.Instance.Update(itemCode,itemCurrentCount);
         }
@@ -71,7 +74,7 @@ namespace WF
             Stream stream;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
             {
-                Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
+                Filter = "csv files (*.csv)|*.csv",
                 FilterIndex = 2,
                 RestoreDirectory = true
             };
@@ -93,7 +96,7 @@ namespace WF
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 InitialDirectory = "c:\\",
-                Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
+                Filter = "csv files (*.csv)|*.csv",
                 FilterIndex = 2,
                 RestoreDirectory = true
             };
@@ -116,6 +119,14 @@ namespace WF
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+        }
+
+        private void ItemDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            if(e.ColumnIndex == (int)ColumnType.CurrentCount && e.Context.HasFlag(DataGridViewDataErrorContexts.Commit))
+            {
+                MessageBox.Show($"{ColumnType.CurrentCount.ToString()} is an integer only column.");
+            }       
         }
     }
 }
