@@ -9,7 +9,7 @@ using System.IO;
 
 namespace BL.Tests
 {
-    [TestClass()]
+    [TestClass()]  
     public class ItemRepositoryTests
     {
 
@@ -34,6 +34,40 @@ namespace BL.Tests
             Assert.AreEqual(expected.Description, items[0].Description);
             Assert.AreEqual(expected.CurrentCount, items[0].CurrentCount);
             Assert.AreEqual(expected.OnOrder, items[0].OnOrder);
+        }
+
+        [TestMethod()]
+        public void RetrieveTestMissingItems()
+        {
+            //Assign
+            FileStream stream = File.OpenRead(@"Files/missingItems.csv");
+            var expected = 0;
+
+            //Act
+            var items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+
+            //Assert
+            Assert.AreEqual(expected, items.Count);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void RetrieveTestIncompleteItems()
+        {
+            //Assign
+            FileStream stream = File.OpenRead(@"Files/incompleteItems.csv");
+            var expected = new Item()
+            {
+                Code = "A0001",
+                Description = "Horse on Wheels",
+                CurrentCount = 5,
+                OnOrder = false
+            };
+
+            //Act
+            var items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+
+            //Assert
         }
 
         [TestMethod()]

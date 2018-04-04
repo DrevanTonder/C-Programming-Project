@@ -14,6 +14,7 @@ namespace WF
 {
     public partial class ItemView : Form
     {
+        // This dictionary will store the items retrieved by the ItemRepository
         private Dictionary<string,Item> itemDictionary;
 
         public ItemView()
@@ -25,11 +26,13 @@ namespace WF
         {
             itemDictionary = new Dictionary<string, Item>();
 
+            //Add our own custom error handler so that the user can actually understand what went wrong
             ItemDataGridView.DataError += ItemDataGridView_DataError;
         }
 
         private void PopulateRows(IEnumerable<Item> items)
         {
+            // add a row for all the items
             foreach (var item in items)
             {
                 PopulateRow(item);
@@ -38,17 +41,22 @@ namespace WF
 
         private void PopulateRow(Item item)
         {
+            // create a temporary object
             var row = new object[4] { item.Code, item.Description, item.CurrentCount, item.OnOrder };
+            // add the row
             ItemDataGridView.Rows.Add(row);
         }
 
         private void CreateColumns()
         {
+            // set the number of columns
             ItemDataGridView.ColumnCount = 4;
 
+            // create all the columns needed
             CreateColumn("Item Code",ColumnType.Code, typeof(string));
             CreateColumn("Description", ColumnType.Description, typeof(string));
-            CreateColumn("Current Count", ColumnType.CurrentCount, typeof(int), readOnly:false);
+            // this is the only column that is editable
+            CreateColumn("Current Count", ColumnType.CurrentCount, typeof(int), readOnly:false); 
             CreateColumn("On Order", ColumnType.OnOrder, typeof(bool));
         }
 

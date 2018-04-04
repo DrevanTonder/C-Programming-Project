@@ -39,7 +39,15 @@ namespace BL
             {
                 csv.Configuration.TypeConverterCache.AddConverter(typeof(bool), new MyBooleanConverter());
                 csv.Configuration.RegisterClassMap<ItemMap>();
-                itemList = new List<Item>(csv.GetRecords<Item>());
+                try
+                {
+                    itemList = new List<Item>(csv.GetRecords<Item>());
+                }
+                catch (CsvHelper.MissingFieldException e)
+                {
+                    throw new ArgumentException("CSV Source has incomplete items", e);
+                }
+                
             }
             
             foreach(var item in itemList)
