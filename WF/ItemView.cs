@@ -103,7 +103,7 @@ namespace WF
 
         /// <summary>
         /// Open a Save File dialog
-        /// Save the file
+        /// and then save the file
         /// </summary>
         private void SaveFile()
         {
@@ -136,7 +136,7 @@ namespace WF
 
         /// <summary>
         /// Open a Open File Dialog
-        /// Display the Contents
+        /// and then display the Contents
         /// </summary>
         private void OpenFile()
         {
