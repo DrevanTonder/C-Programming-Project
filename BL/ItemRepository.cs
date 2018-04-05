@@ -8,30 +8,31 @@ using System.Threading.Tasks;
 
 namespace BL
 {
+    /// <summary> 
+    ///  This class contains the methods to read and write items too a csv file
+    /// </summary> 
     public class ItemRepository
     {
         private Dictionary<string, Item> items;
 
-        private static ItemRepository instance;
-
-        private ItemRepository() {
+        /// <summary> 
+        ///  ItemRepository Constructor
+        /// </summary>
+        public ItemRepository() {
             items = new Dictionary<string, Item>();
         }
 
-        public static ItemRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ItemRepository();
-                }
-                return instance;
-            }
-        }
-
+        /// <summary>
+        /// Retrieves a list of items from the supplied stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the stream has incomplete items</exception>
         public IEnumerable<Item> Retrieve(Stream stream)
         {
+            if (stream == null) throw new ArgumentException(nameof(stream) + " can not be null", nameof(stream));
+
             List<Item> itemList;
 
             using (var reader = new StreamReader(stream))
@@ -45,7 +46,7 @@ namespace BL
                 }
                 catch (CsvHelper.MissingFieldException e)
                 {
-                    throw new ArgumentException("CSV Source has incomplete items", e);
+                    throw new ArgumentException(nameof(stream) + " has incomplete items", e);
                 }
                 
             }
@@ -58,8 +59,14 @@ namespace BL
             return itemList;
         }
 
+        /// <summary> 
+        ///  Saves a list of items from the supplied stream
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
         public void Save(Stream stream)
         {
+            if (stream == null) throw new ArgumentException(nameof(stream) + " can not be null", nameof(stream));
+
             using (var writer = new StreamWriter(stream))
             using (var csv = new CsvHelper.CsvWriter(writer))
             {
@@ -69,12 +76,18 @@ namespace BL
             }
         }
 
+        /// <summary> 
+        ///  Updates an Item's Current Count.
+        /// </summary>
         public void Update(string itemCode, int CurrentCount)
         {
             items[itemCode].CurrentCount = CurrentCount;
         }
 
-        public class MyBooleanConverter : CsvHelper.TypeConversion.DefaultTypeConverter
+        /// <summary>
+        /// This class just converts Yes/No values into True/False
+        /// </summary>
+        private class MyBooleanConverter : CsvHelper.TypeConversion.DefaultTypeConverter
         {
             public override string ConvertToString(object value, CsvHelper.IWriterRow row, CsvHelper.Configuration.MemberMapData memberMapData)
             {
@@ -99,7 +112,10 @@ namespace BL
             }
         }
 
-        public sealed class ItemMap : CsvHelper.Configuration.ClassMap<Item>
+        /// <summary>
+        /// This class tells CsvHelper how to convert the file rows into items and vice versa
+        /// </summary>
+        private sealed class ItemMap : CsvHelper.Configuration.ClassMap<Item>
         {
             public ItemMap()
             {

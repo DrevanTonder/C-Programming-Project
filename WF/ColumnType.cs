@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WF
 {
-    public enum ColumnType
+    internal enum ColumnType
     {
         Code = 0,
         Description,

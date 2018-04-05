@@ -17,6 +17,7 @@ namespace BL.Tests
         public void RetrieveTest()
         {
             //Assign
+            var itemRepository = new ItemRepository();
             FileStream stream = File.OpenRead(@"Files/importtest.csv");
             var expected = new Item()
             {
@@ -27,7 +28,7 @@ namespace BL.Tests
             };
 
             //Act
-            var items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+            var items = (List<Item>)itemRepository.Retrieve(stream);
 
             //Assert
             Assert.AreEqual(expected.Code, items[0].Code);
@@ -40,11 +41,12 @@ namespace BL.Tests
         public void RetrieveTestMissingItems()
         {
             //Assign
+            var itemRepository = new ItemRepository();
             FileStream stream = File.OpenRead(@"Files/missingItems.csv");
             var expected = 0;
 
             //Act
-            var items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+            var items = (List<Item>)itemRepository.Retrieve(stream);
 
             //Assert
             Assert.AreEqual(expected, items.Count);
@@ -55,6 +57,7 @@ namespace BL.Tests
         public void RetrieveTestIncompleteItems()
         {
             //Assign
+            var itemRepository = new ItemRepository();
             FileStream stream = File.OpenRead(@"Files/incompleteItems.csv");
             var expected = new Item()
             {
@@ -65,7 +68,7 @@ namespace BL.Tests
             };
 
             //Act
-            var items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+            var items = (List<Item>)itemRepository.Retrieve(stream);
 
             //Assert
         }
@@ -74,6 +77,7 @@ namespace BL.Tests
         public void SaveTest()
         {
             //Assign
+            var itemRepository = new ItemRepository();
             var read = @"Files/importtest.csv";
             var write = @"Files/exporttest.csv";
             
@@ -88,18 +92,18 @@ namespace BL.Tests
             //Act
             using (FileStream stream = File.OpenRead(read))
             {
-                ItemRepository.Instance.Retrieve(stream);
+                itemRepository.Retrieve(stream);
             }
 
             using (FileStream stream = File.OpenWrite(write))
             {
-                ItemRepository.Instance.Save(stream);
+                itemRepository.Save(stream);
             }
 
             List<Item> items;
             using (FileStream stream = File.OpenRead(write))
             {
-                items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+                items = (List<Item>)itemRepository.Retrieve(stream);
             }
 
             //Assert
@@ -113,6 +117,7 @@ namespace BL.Tests
         public void UpdateTest()
         {
             //Assign
+            var itemRepository = new ItemRepository();
             var read = @"Files/importtest.csv";
             var write = @"Files/importtest.csv";
 
@@ -128,19 +133,19 @@ namespace BL.Tests
 
             using (FileStream stream = File.OpenRead(read))
             {
-                ItemRepository.Instance.Retrieve(stream);
+                itemRepository.Retrieve(stream);
             }
 
-            ItemRepository.Instance.Update("A0001", 56);
+            itemRepository.Update("A0001", 56);
             using (FileStream stream = File.OpenWrite(write))
             {
-                ItemRepository.Instance.Save(stream);
+                itemRepository.Save(stream);
             }
 
             List<Item> items;
             using (FileStream stream = File.OpenRead(write))
             {
-                items = (List<Item>)ItemRepository.Instance.Retrieve(stream);
+                items = (List<Item>)itemRepository.Retrieve(stream);
             }
 
             //Assert
