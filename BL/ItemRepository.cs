@@ -25,8 +25,8 @@ namespace BL
         /// <summary>
         /// Retrieves a list of items from the supplied stream
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <param name="stream">The stream to read to</param>
+        /// <returns>A IEnumerable of the items in the stream</returns>
         /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
         /// <exception cref="System.ArgumentException">Thrown when the stream has incomplete items</exception>
         public IEnumerable<Item> Retrieve(Stream stream)
@@ -59,9 +59,10 @@ namespace BL
             return itemList;
         }
 
-        /// <summary> 
-        ///  Saves a list of items from the supplied stream
+        /// <summary>
+        /// Saves a list of items from the supplied stream
         /// </summary>
+        /// <param name="stream">The stream to save to</param>
         /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
         public void Save(Stream stream)
         {
@@ -76,12 +77,14 @@ namespace BL
             }
         }
 
-        /// <summary> 
-        ///  Updates an Item's Current Count.
+        /// <summary>
+        /// Updates an Item's Current Count.
         /// </summary>
-        public void Update(string itemCode, int CurrentCount)
+        /// <param name="itemCode">The Item's code used to find the item</param>
+        /// <param name="currentCount">The Item's new CurrentCount</param>
+        public void Update(string itemCode, int currentCount)
         {
-            items[itemCode].CurrentCount = CurrentCount;
+            items[itemCode].CurrentCount = currentCount;
         }
 
         /// <summary>
