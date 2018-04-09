@@ -2,7 +2,7 @@
 
 # Table of Contents
 
-1. [Object Model](#object model)
+1. [Object Model](#object%20model)
 2. [CsvHelper](#csvhelper)
 3. [Testing](#testing)
 4. [Business Logic](#bl)
