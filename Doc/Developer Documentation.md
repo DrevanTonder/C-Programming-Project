@@ -4,9 +4,8 @@
 
 1. [Object Model](#object-model)
 2. [CsvHelper](#csvhelper)
-3. [Testing](#testing)
-4. [Business Logic](#bl)
-5. [Windows Forms](#wf)
+3. [Business Logic](#bl)
+4. [Windows Forms](#wf)
 
 # Object Model
 
@@ -15,24 +14,6 @@ The object model can be found in the same directory as this file with the filena
 # CsvHelper
 
 CsvHelper is an external NuGet package. Read the Documentation at http://joshclose.github.io/CsvHelper/
-
-# Testing
-
-The unit tests can be found in the BL.Test Project.
-
-| Method Name                    | Description                              |
-| ------------------------------ | ---------------------------------------- |
-| RetrieveTest                   | Normal Usage                             |
-| RetrieveTestStreamNull         | Throw `ArgumentNullException` when `stream` is null |
-| RetrieveTestMissingItems       | Make sure that the Retrieve method returns a empty `IEnumerable` when `stream` has no items. |
-| RetrieveTestIncompleteItems    | Throw `ArgumentException` when the `stream` has incomplete items. |
-| SaveTest                       | Normal Usage                             |
-| SaveTestStreamNull             | Throw `ArgumentNullException` when `stream` is null |
-| UpdateTest                     | Normal Usage                             |
-| UpdateTestItemCodeNull         | Throw `ArgumentNullException` when `itemCode` is null |
-| UpdateTestItemCodeDoesNotExist | Throw `ArgumentException` when `itemCode` is not in the `ItemRepository` items dictionary |
-
-
 
 # BL
 
