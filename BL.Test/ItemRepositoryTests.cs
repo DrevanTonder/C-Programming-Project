@@ -38,11 +38,25 @@ namespace BL.Tests
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void RetrieveTestStreamNull()
+        {
+            //Assign
+            var itemRepository = new ItemRepository();
+            FileStream fileStream = null;
+
+            //Act
+            itemRepository.Retrieve(fileStream);
+
+            //Assert
+        }
+
+        [TestMethod()]
         public void RetrieveTestMissingItems()
         {
             //Assign
             var itemRepository = new ItemRepository();
-            FileStream stream = File.OpenRead(@"Files/missingItems.csv");
+            var stream = File.OpenRead(@"Files/missingItems.csv");
             var expected = 0;
 
             //Act
@@ -58,7 +72,7 @@ namespace BL.Tests
         {
             //Assign
             var itemRepository = new ItemRepository();
-            FileStream stream = File.OpenRead(@"Files/incompleteItems.csv");
+            var stream = File.OpenRead(@"Files/incompleteItems.csv");
             var expected = new Item()
             {
                 Code = "A0001",
@@ -114,6 +128,20 @@ namespace BL.Tests
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SaveTestStreamNull()
+        {
+            //Assign
+            var itemRepository = new ItemRepository();
+            FileStream fileStream = null;
+
+            //Act
+            itemRepository.Save(fileStream);
+
+            //Assert
+        }
+
+        [TestMethod()]
         public void UpdateTest()
         {
             //Assign
@@ -153,6 +181,36 @@ namespace BL.Tests
             Assert.AreEqual(expected.Description, items[0].Description);
             Assert.AreEqual(expected.CurrentCount, items[0].CurrentCount);
             Assert.AreEqual(expected.OnOrder, items[0].OnOrder);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void UpdateTestItemCodeNull()
+        {
+            //Assign
+            var itemRepository = new ItemRepository();
+            string itemCode = null;
+            var currentCount = 6;
+
+            //Act
+            itemRepository.Update(itemCode, currentCount);
+
+            //Assert
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void UpdateTestItemCodeDoesNotExist()
+        {
+            //Assign
+            var itemRepository = new ItemRepository();
+            string itemCode = "IDoNotExist";
+            var currentCount = 6;
+
+            //Act
+            itemRepository.Update(itemCode, currentCount);
+
+            //Assert
         }
     }
 }

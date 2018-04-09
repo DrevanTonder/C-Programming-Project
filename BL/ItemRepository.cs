@@ -27,11 +27,11 @@ namespace BL
         /// </summary>
         /// <param name="stream">The stream to read to</param>
         /// <returns>A IEnumerable of the items in the stream</returns>
-        /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when the stream is null</exception>
         /// <exception cref="System.ArgumentException">Thrown when the stream has incomplete items</exception>
         public IEnumerable<Item> Retrieve(Stream stream)
         {
-            if (stream == null) throw new ArgumentException(nameof(stream) + " can not be null", nameof(stream));
+            if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
 
             List<Item> itemList;
 
@@ -63,10 +63,10 @@ namespace BL
         /// Saves a list of items from the supplied stream
         /// </summary>
         /// <param name="stream">The stream to save to</param>
-        /// <exception cref="System.ArgumentException">Thrown when the stream is null</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown when the stream is null</exception>
         public void Save(Stream stream)
         {
-            if (stream == null) throw new ArgumentException(nameof(stream) + " can not be null", nameof(stream));
+            if (stream == null) throw new ArgumentNullException(nameof(stream) + " can not be null", nameof(stream));
 
             using (var writer = new StreamWriter(stream))
             using (var csv = new CsvHelper.CsvWriter(writer))
@@ -82,9 +82,21 @@ namespace BL
         /// </summary>
         /// <param name="itemCode">The Item's code used to find the item</param>
         /// <param name="currentCount">The Item's new CurrentCount</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when itemCode is null</exception>
+        /// <exception cref="System.ArgumentException">Thrown when itemCode is not in the itemRepository items dictionary</exception>
         public void Update(string itemCode, int currentCount)
         {
-            items[itemCode].CurrentCount = currentCount;
+            if (itemCode == null) throw new ArgumentNullException(nameof(itemCode) + " can not be null", nameof(itemCode));
+
+            try
+            {
+                items[itemCode].CurrentCount = currentCount;
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new ArgumentException(nameof(itemCode) + " is not an item code", e);
+            }
+            
         }
 
         /// <summary>
